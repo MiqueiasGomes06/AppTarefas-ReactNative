@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput, AsyncStorage}
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput}
  from "react-native";
 import {Ionicons} from '@expo/vector-icons';
 import TaskList from "./src/components/TaskList";
 import * as Animatable from 'react-native-animatable';
+import { AsyncStorage } from 'react-native';
 
 
 const AnimatableBtn = Animatable.createAnimatableComponent(TouchableOpacity);
