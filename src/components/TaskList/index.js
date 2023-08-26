@@ -14,7 +14,7 @@ export default function TaskList( {data} ){
 
             </View>
         </Animatable.View>
-    )
+    ) 
 }
 
 const styles = StyleSheet.create({

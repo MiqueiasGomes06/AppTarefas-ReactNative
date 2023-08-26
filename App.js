@@ -1,7 +1,10 @@
 import React, { useState } from "react"
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList} from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput} from "react-native";
 import {Ionicons} from '@expo/vector-icons';
 import TaskList from "./src/components/TaskList";
+import * as Animatable from 'react-native-animatable';
+
+const AnimatableBtn = Animatable.createAnimatableComponent(TouchableOpacity);
 
 export default function App(){
 
@@ -12,6 +15,9 @@ export default function App(){
       {key: 4, task: 'comprar chocolate para mila'},
       {key: 5, task: 'Comprar pao de novo '}      
     ]);
+
+    const [open, setOpen] = useState(false);
+
 
   return(
     <SafeAreaView style={styles.container}>
@@ -30,11 +36,32 @@ export default function App(){
       
       />
 
+      <Modal animationType="slide" transparent={false} visible={open}>
+          <SafeAreaView style={styles.modal}> 
 
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={() => setOpen(false)}>
+              <Ionicons style={{marginLeft: 5, marginRight: 5}} name="md-arrow-back" size={40} color="#FFF" />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.modalTitle}>Nova Tarefa</Text>
+
+          <View style={styles.modalBody}>
+            <TextInput placeholder="O que precisa fazer hoje ?" style={styles.input}/> 
+
+            <TouchableOpacity style={styles.handleAdd}>
+              <Text style={styles.handleAddText}>Cadastrar</Text>
+            </TouchableOpacity>
+          </View>
+
+
+          </SafeAreaView>
+      </Modal>
      
-     <TouchableOpacity style={styles.fab}>
+     <AnimatableBtn style={styles.fab} useNativeDriver animation={"bounceInUp"} duration={1500}
+     onPress={ () => setOpen(true)  }>
         <Ionicons name= "ios-add" size={35} color="#FFF"/>
-     </TouchableOpacity>
+     </AnimatableBtn>
 
 
 
@@ -74,5 +101,47 @@ const styles = StyleSheet.create({
       }
 
 
+    },
+    modal:{
+      flex: 1,
+      backgroundColor: '#171d31'
+    },
+    modalHeader:{
+      marginLeft: 10,
+      marginTop: 20,
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    modalTitle:{
+      marginLeft: 15,
+      fontSize: 23,
+      color: '#FFF'
+    },
+    modalBody:{
+      marginTop: 15,
+    },
+    input:{
+      fontSize: 15,
+      marginLeft: 10,
+      marginRight: 10,
+      marginTop: 30,
+      backgroundColor: '#FFF',
+      padding: 9,
+      height: 80,
+      textAlignVertical: 'top',
+      color: '#000'
+    },
+    handleAdd:{
+      backgroundColor: '#FFF',
+      marginTop: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: 10,
+      marginRight: 10,
+      height: 40,
+      borderRadius: 5
+    },
+    handleAddText:{
+      fontSize: 20
     }
 });
