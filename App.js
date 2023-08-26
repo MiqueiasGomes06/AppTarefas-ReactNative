@@ -15,6 +15,7 @@ export default function App(){
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState('');
 
+    // buscando todas as tarefas ao abrir o app
 
     useEffect(() => {
       async function loadTasks(){
@@ -29,6 +30,17 @@ export default function App(){
       loadTasks();
 
     }, [])
+
+    // salvando caso tenha alguma tarefa alterada
+    useEffect(() => {
+
+      async function saveTasks(){
+        await AsyncStorage.setItem('@task', JSON.stringify(task));
+      }
+
+      saveTasks();
+
+    }, [task])
 
 
     function handleAdd(){
