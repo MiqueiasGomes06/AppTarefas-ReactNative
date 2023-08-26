@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput} from "react-native";
 import {Ionicons} from '@expo/vector-icons';
 import TaskList from "./src/components/TaskList";
@@ -8,16 +8,31 @@ const AnimatableBtn = Animatable.createAnimatableComponent(TouchableOpacity);
 
 export default function App(){
 
-  const[task, setTask] = useState([
-      {key: 1, task: 'Comprar pao'},
-      {key: 2, task: 'Assistir o primeiro video'},
-      {key: 3, task: 'Estudar react'},
-      {key: 4, task: 'comprar chocolate para mila'},
-      {key: 5, task: 'Comprar pao de novo '}      
-    ]);
+  const[task, setTask] = useState([]);
 
     const [open, setOpen] = useState(false);
+    const [input, setInput] = useState('');
 
+
+    function handleAdd(){
+      if(input === '')return;
+
+      const data = {
+        key: input,
+        task: input
+      };
+
+      setTask([...task, data]);
+
+      setOpen(false);
+      setInput('');
+    }
+
+
+   const handleDelete = useCallback((data) => {
+    const find = task.filter(r => r.key !== data.key);
+    setTask(find);
+   })
 
   return(
     <SafeAreaView style={styles.container}>
@@ -32,7 +47,7 @@ export default function App(){
       showsHorizontalScrollIndicator={false}
       data={task}
       keyExtractor={(item) => String(item.key)}
-      renderItem={({ item }) => <TaskList data={item}/>}
+      renderItem={({ item }) => <TaskList data={item} handleDelete={handleDelete}/>}
       
       />
 
@@ -46,13 +61,17 @@ export default function App(){
           </View>
           <Text style={styles.modalTitle}>Nova Tarefa</Text>
 
-          <View style={styles.modalBody}>
-            <TextInput placeholder="O que precisa fazer hoje ?" style={styles.input}/> 
+          <Animatable.View style={styles.modalBody} animation={"fadeInUp"} useNativeDriver>
+            <TextInput multiline={true} placeholder="O que precisa fazer hoje ?" style={styles.input}
+            placeholderTextColor={'#747474'}
+            autoCorrect={false}
+            value={input}
+            onChangeText={(texto) => setInput(texto)}/> 
 
-            <TouchableOpacity style={styles.handleAdd}>
+            <TouchableOpacity style={styles.handleAdd} onPress={handleAdd}>
               <Text style={styles.handleAddText}>Cadastrar</Text>
             </TouchableOpacity>
-          </View>
+          </Animatable.View>
 
 
           </SafeAreaView>
